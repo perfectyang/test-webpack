@@ -45,8 +45,7 @@ module.exports = {
     port: 3201
   },
   entry: {
-    app: './src/app.js',
-    themes: './src/themes.js'
+    app: './src/app.js'
   },
   output: {
     filename: '[name].bundle.js?[hash]',
