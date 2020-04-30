@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <div>在这里测试啊</div>
+    <div>在这里测试啊测试自动打包</div>
   </div>
 </template>
 
