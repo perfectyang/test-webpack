@@ -4,11 +4,9 @@ const merge = require('webpack-merge')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const {
-  CleanWebpackPlugin
-} = require('clean-webpack-plugin')
+const ImageminWebpWebpackPlugin= require("imagemin-webp-webpack-plugin");
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
-console.log('在这里', process.env.NODE_ENV)
 
 function assetsPath(_path) {
   const assetsSubDirectory = process.env.NODE_ENV === 'production' ?
@@ -92,7 +90,8 @@ const productionConfig = merge(baseConfig, {
     new MiniCssExtractPlugin({
       filename: assetsPath('css/[name].css?[hash]'),
       chunkFilename: assetsPath('css/[id].css?[hash]')
-    })
+    }),
+    new ImageminWebpWebpackPlugin()
   ]
 })
 
