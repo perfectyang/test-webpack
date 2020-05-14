@@ -1,17 +1,16 @@
 <template>
   <div class="app">
-    <img :src="bdLogo" />
+    <img src="./bg.jpg" />
+    <div class="back">1111</div>
     <div>在这里测试啊测试自动打包---没test</div>
   </div>
 </template>
 
 <script>
 import isEqual from 'lodash/isEqual'
-import bdLogo from './bd_logo1.png'
 export default {
   data () {
     return {
-      bdLogo
     }
   },
   created () {
@@ -53,5 +52,9 @@ export default {
 </script>
 
 <style lang='less' scoped>
-
+.back {
+  background: url('./bd_logo1.png');
+  width: 200px;
+  height: 200px;
+}
 </style>

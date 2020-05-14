@@ -8,8 +8,12 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 function resolve(dir) {
   return path.resolve(__dirname, dir)
 }
-
-
+function assetsPath(_path) {
+  const assetsSubDirectory = process.env.NODE_ENV === 'production' ?
+    'static' :
+    'static'
+  return path.posix.join(assetsSubDirectory, _path)
+}
 module.exports = {
   entry: {
     index: [path.resolve(__dirname, 'src/app.js')]
@@ -65,12 +69,13 @@ module.exports = {
             options: {
               hmr: process.env.NODE_ENV === 'development',
               reloadAll: true,
+              publicPath: '/',
             }
           } : 'vue-style-loader',
           {
               loader: 'css-loader',
               options: {
-                  importLoaders: 2
+                importLoaders: 2
               }
           },
           // {
@@ -83,7 +88,11 @@ module.exports = {
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: 'url-loader'
+        loader: 'url-loader',
+        options: {
+          limit: false,
+          name: assetsPath('img/[name].[ext]')
+        }
       }
     ]
   },

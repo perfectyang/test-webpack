@@ -91,7 +91,42 @@ const productionConfig = merge(baseConfig, {
       filename: assetsPath('css/[name].css?[hash]'),
       chunkFilename: assetsPath('css/[id].css?[hash]')
     }),
-    new ImageminWebpWebpackPlugin()
+    new ImageminWebpWebpackPlugin({
+      config: [{
+        test: /\.(jpe?g|png)/,
+        options: {
+          quality:  10
+        }
+      }],
+      overrideExtension: true,
+      detailedLogs: false,
+      silent: false,
+      strict: true
+    }),
+    (compiler) => {
+      compiler.hooks.emit.tapAsync('self', (compilation, cb) => {
+        console.log('compilation', compilation)
+        let assetNames = Object.keys(compilation.assets);
+        console.log(assetNames)
+        const statics = []
+        const images = []
+        assetNames.forEach(name => {
+          if (/\.(js|css|html)/.test(name)) {
+            statics.push(name)
+          }
+        })
+        const reg = /\.(jpe?g|png)/
+        statics.forEach(curJs => {
+          let source = compilation.assets[curJs].source()
+          source = source.replace(reg, ($0, $1) => '.webp')
+          compilation.assets[curJs] = {
+            source: () => source,
+            size: () => source.length
+          }
+        })
+        cb()
+      })
+    }
   ]
 })
 
