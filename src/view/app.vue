@@ -51,10 +51,13 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='less'>
 .back {
   background: url('./bd_logo1.png');
   width: 200px;
   height: 200px;
+}
+body {
+  background: url('./4.jpg');
 }
 </style>

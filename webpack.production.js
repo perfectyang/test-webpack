@@ -19,7 +19,7 @@ function replaceWebp (compiler) {
   compiler.hooks.emit.tapAsync('webpack-replace-webp', (compilation, cb) => {
     let assetNames = Object.keys(compilation.assets)
     const sourceReg = /\.(js|css|html)/
-    const targetReg = /\.(png|jpe?g|gif|svg)/
+    const targetReg = /\.(png|jpe?g|gif|svg)/g
     const handleSource = (url) => {
       let source = compilation.assets[url].source()
       source = source.replace(targetReg, ($0, $1) => '.webp')
@@ -31,6 +31,10 @@ function replaceWebp (compiler) {
     assetNames.forEach(name => {
       if (sourceReg.test(name)) {
         handleSource(name)
+      }
+      if (name.match(targetReg)) { // 将源文件删除
+      // if (targetReg.test(name)) { // 将源文件删除
+        delete compilation.assets[name]
       }
     })
     cb()

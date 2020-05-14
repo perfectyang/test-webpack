@@ -7,10 +7,10 @@
   "scripts": {
     "debug": "node --inspect-brk ./node_modules/webpack/bin/webpack.js",
     "dev": "webpack-dev-server --inline --progress --config webpack.dev.js",
-    "build": "cross-env NODE_ENV=production webpack --mode production --config webpack.production.js --progress --color",
+    "prebuild": "cross-env NODE_ENV=production webpack --mode production --config webpack.production.js --progress --color",
     "publish": "npm run build && node publish.js",
     "serve": "./node_modules/nodemon/bin/nodemon.js server/app.js",
-    "copy": "rm -rf /usr/local/var/www/testweb/* && cp -R dist/* /usr/local/var/www/testweb/"
+    "build": "rm -rf /usr/local/var/www/testweb/* && cp -R dist/* /usr/local/var/www/testweb/"
   },
   "author": "Godfery <hiyangguo@qq.com>",
   "license": "MIT",
