@@ -14,6 +14,30 @@ function assetsPath(_path) {
     'static'
   return path.posix.join(assetsSubDirectory, _path)
 }
+
+function replaceWebp (compiler) {
+  compiler.hooks.emit.tapAsync('webpack-replace-webp', (compilation, cb) => {
+    let assetNames = Object.keys(compilation.assets)
+    const sourceReg = /\.(js|css|html)/
+    const targetReg = /\.(png|jpe?g|gif|svg)/
+    const handleSource = (url) => {
+      let source = compilation.assets[url].source()
+      source = source.replace(targetReg, ($0, $1) => '.webp')
+      compilation.assets[url] = {
+        source: () => source,
+        size: () => source.length
+      }
+    }
+    assetNames.forEach(name => {
+      if (sourceReg.test(name)) {
+        handleSource(name)
+      }
+    })
+    cb()
+  })
+}
+
+
 const productionConfig = merge(baseConfig, {
   mode: 'production',
   output: {
@@ -103,30 +127,7 @@ const productionConfig = merge(baseConfig, {
       silent: false,
       strict: true
     }),
-    (compiler) => {
-      compiler.hooks.emit.tapAsync('self', (compilation, cb) => {
-        console.log('compilation', compilation)
-        let assetNames = Object.keys(compilation.assets);
-        console.log(assetNames)
-        const statics = []
-        const images = []
-        assetNames.forEach(name => {
-          if (/\.(js|css|html)/.test(name)) {
-            statics.push(name)
-          }
-        })
-        const reg = /\.(jpe?g|png)/
-        statics.forEach(curJs => {
-          let source = compilation.assets[curJs].source()
-          source = source.replace(reg, ($0, $1) => '.webp')
-          compilation.assets[curJs] = {
-            source: () => source,
-            size: () => source.length
-          }
-        })
-        cb()
-      })
-    }
+    replaceWebp
   ]
 })
 
