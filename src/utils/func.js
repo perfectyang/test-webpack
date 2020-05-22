@@ -1,4 +1,4 @@
-export const eventEmitter = {
+const eventEmitter = {
   // 缓存列表
   list: {},
   // 订阅
@@ -49,14 +49,30 @@ export const eventEmitter = {
     // 第一个参数是对应的 event 值，直接用数组的 shift 方法取出
     let event = [].shift.call(arguments)
     let fns = [..._this.list[event]]
+    let lastParams = arguments[arguments.length - 1]
+    let callFn
+    if (lastParams instanceof Function) {
+      callFn = [].pop.call(arguments)
+    }
     // 如果缓存列表里没有 fn 就返回 false
     if (!fns || fns.length === 0) {
       return false
     }
+    console.log(arguments.length)
     // 遍历 event 值对应的缓存列表，依次执行 fn
     fns.forEach(fn => {
-      fn.apply(_this, arguments)
+      const res = fn.apply(_this, arguments)
+      res && callFn && callFn(res)
     })
     return _this
   }
 }
+
+eventEmitter.on('test', (res) => {
+  console.log('rse', res)
+  return Promise.resolve('a')
+})
+
+eventEmitter.emit('test', '我传过来的', (res) => {
+  res.then(rs => console.log(rs))
+})
