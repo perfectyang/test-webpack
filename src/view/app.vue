@@ -25,62 +25,64 @@ export default {
       type: 1,
       renderTxt: '',
       timeTick: 20,
-      grapTime: 0
+      grapTime: 0,
+      startFlag: true,
+      queueTimer: null,
+      setTimer: null,
+      startQueue: true
     }
   },
   created () {
     this.onRender()
-    setInterval(_ => {
-      if (this.timeTick <= 0) {
-        this.grapTime = 0
-        queue = []
-      }
-      if (queue.length) {
-        const effect = queue[0]
-        const curTimeLeft = parseInt(((new Date().getTime()) - effect.time) / 1000)
-        let targetTime = effect.renderTime + this.grapTime
-        // if (effect.question_type === 3) {
-        //   targetTime = effect.renderTime + this.grapTime
-        // }
-        console.log('时间间隔', this.grapTime, )
-        console.log('当前时间差', curTimeLeft)
-        console.log('当需要渲染时间', effect.renderTime)
-        if (curTimeLeft >= targetTime) {
-          effect.fn()
-          console.log('this.grapTime', this.grapTime)
-          // if (effect.question_type === 3) {
-          //   this.grapTime += effect.renderTime
-          // }
-          this.grapTime += effect.renderTime
-          queue.shift()
-        }
-        console.log('还剩多少', queue)
-      }
-    })
   },
   methods: {
     start () {
+      // this.startRender()
       const timer = setInterval(_ => {
         if (this.timeTick <= 0) {
           clearInterval(timer)
+          this.startQueue = true
         }
         this.timeTick -= 1
       }, 1000)
     },
-    nowTime () {
-      return (new Date().getTime())
+    startRender () {
+      console.log('初始化几次')
+      this.queueTimer = setInterval(_ => {
+        console.log('一直在跑')
+        if (this.timeTick <= 0) {
+          console.log('还剩余多少', queue)
+          this.startFlag = true
+          queue = []
+          clearInterval(this.queueTimer)
+        }
+        if (this.startFlag) {
+          this.startEffect()
+          this.startFlag = false
+          clearTimeout(this.setTimer)
+          this.setTimer = setTimeout(_ => {
+            this.startFlag = true
+          }, this.renderTime)
+        }
+      })
+    },
+    startEffect () {
+      if (queue.length) {
+        const effect = queue[0]
+        effect.fn()
+        queue.shift()
+      }
     },
     renderFn () {
       localCount += 1
-      if (this.type === 1) {
-        this.type = 3
-      } else {
-        this.type = 1
-      }
+      // if (this.type === 1) {
+      //   this.type = 3
+      // } else {
+      //   this.type = 1
+      // }
       this.eventEmitter.emit('testfn', this.type, localCount)
     },
     onRender () {
-
       const createWaitTrigger = (type, localCount) => {
         return () => {
           const txt = `渲染${type === 1 ? '单选题' : '开放题'}`
@@ -90,15 +92,20 @@ export default {
           console.log('---------end-----')
         }
       }
-
       this.eventEmitter.on('testfn', (type, localCount) => {
-        const renderTime = type === 1 ? 0 : 1
         queue.push({
-          time: this.nowTime(),
           question_type: type,
-          renderTime,
           fn: createWaitTrigger(type, localCount)
         })
+        if (this.startQueue) {
+          if (type === 1) {
+            this.renderTime = 10
+          } else {
+            this.renderTime = 4000
+          }
+          this.startRender()
+          this.startQueue = false
+        }
       })
     }
   }

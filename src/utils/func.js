@@ -1,4 +1,4 @@
-const eventEmitter = {
+export const eventEmitter = {
   // 缓存列表
   list: {},
   // 订阅
@@ -68,11 +68,11 @@ const eventEmitter = {
   }
 }
 
-eventEmitter.on('test', (res) => {
-  console.log('rse', res)
-  return Promise.resolve('a')
-})
+// eventEmitter.on('test', (res) => {
+//   console.log('rse', res)
+//   return Promise.resolve('a')
+// })
 
-eventEmitter.emit('test', '我传过来的', (res) => {
-  res.then(rs => console.log(rs))
-})
+// eventEmitter.emit('test', '我传过来的', (res) => {
+//   res.then(rs => console.log(rs))
+// })
