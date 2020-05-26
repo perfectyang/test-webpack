@@ -6,10 +6,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title><%= htmlWebpackPlugin.options.title %></title>
+  <style>
+    .box {
+      width: 100px;
+      height: 100px;
+      background: red;
+    }
+  </style>
 </head>
 
 <body>
   <div id="app"></div>
+  <div class="box" id="box"></div>
+  <script>
+    var box = document.getElementById('box')
+
+    function throtte (fn, wait) {
+      var pre = Date.now()
+      return function () {
+        var cur = Date.now()
+        if ((cur - pre) > wait) {
+          fn.apply(this, arguments)
+          pre = Date.now()
+        }
+      }
+    }
+
+    function throtte2 (fn, wait) {
+      let flag = true
+      let timer
+      return () => {
+        if (flag) {
+          fn.call(this, arguments)
+          flag = false
+          clearTimeout(timer)
+          timer = setTimeout(_ => {
+            flag = true
+          }, wait)
+        }
+      }
+    }
+
+    function debounce (fn, wait) {
+      var timer
+      return function () {
+        var context = this
+        var args = arguments
+        if (timer) {
+          clearTimeout(timer)
+        }
+        timer = setTimeout(function () {
+          fn.call(context, args)
+        }, wait)
+      }
+    }
+
+
+    box.onmousemove = throtte2(function () {
+      console.log('dd')
+    }, 1000)
+
+  </script>
 </body>
 
 </html>
