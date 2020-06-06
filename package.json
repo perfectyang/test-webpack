@@ -9,7 +9,8 @@
     "dev": "webpack-dev-server --inline --progress --config webpack.dev.js",
     "build": "cross-env NODE_ENV=production webpack --mode production --config webpack.production.js --progress --color",
     "publish": "npm run build && node publish.js",
-    "serve": "./node_modules/nodemon/bin/nodemon.js server/app.js"
+    "serve": "./node_modules/nodemon/bin/nodemon.js server/app.js",
+    "http": "node_modules/http-server/bin/http-server -p 5656 dist"
   },
   "author": "Godfery <hiyangguo@qq.com>",
   "license": "MIT",
@@ -44,6 +45,7 @@
     "gh-pages": "^1.1.0",
     "html-loader": "^0.4.3",
     "html-webpack-plugin": "^3.0.6",
+    "http-server": "^0.12.3",
     "less": "^3.0.1",
     "less-loader": "^4.1.0",
     "markdown-loader": "2.0.0",

@@ -26,6 +26,9 @@ const productionConfig = merge(baseConfig, {
   module: {
     rules: []
   },
+  externals: {
+    'vue': 'Vue'
+  },
   optimization: {
     namedChunks: true,
     moduleIds: 'hashed',

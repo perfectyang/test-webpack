@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title><%= htmlWebpackPlugin.options.title %></title>
+</head>
+
+<body>
+  <style>
+    .progress {
+      height: 50px;
+      background: red;
+    }
+  </style>
+  <div id="app"></div>
+  <div id="progress" class="progress"></div>
+  <div id="test" class="test"></div>
+
+  <script>
+    var progress = document.getElementById('progress');
+    var test = document.getElementById('test');
+    (function() {
+        var timeouts = [];
+        var messageName = "zero-timeout-message";
+        function setZeroTimeout(fn) {
+            timeouts.push(fn);
+            window.postMessage(messageName, "*");
+        }
+        function handleMessage(event) {
+            if (event.source == window && event.data == messageName) {
+                event.stopPropagation();
+                if (timeouts.length > 0) {
+                    var fn = timeouts.shift();
+                    fn();
+                }
+            }
+        }
+        window.addEventListener("message", handleMessage, true);
+        // Add the one thing we want added to the window object.
+        window.setZeroTimeout = setZeroTimeout;
+    })();
+    function handle () {
+      // var i = 1
+      var i = 0;
+      (function run() {
+        console.log(i);
+        progress.innerHTML = i;
+        progress.style.width = i + '%'
+        i += 1;
+        if (i <= 100) {
+          setZeroTimeout(run, 20)
+        }
+      })()
+    }
+    handle()
+
+
+
+    // function timeTick (time) {
+    //   (function go(){
+    //     progress.innerHTML = time;
+    //     test.innerHTML = new Date().toLocaleTimeString();
+    //     time -= 1;
+    //     if (time >= 0) {
+    //       setTimeout(go, 1000)
+    //     }
+    //   })();
+    // }
+    // timeTick(20)
+
+
+
+  </script>
+
+
+</body>
+</html>
