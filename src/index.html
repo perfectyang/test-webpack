@@ -16,6 +16,7 @@
 </head>
 
 <body>
+  <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.15/lodash.js"></script>
   <div id="app"></div>
   <div class="box" id="box"></div>
   <script>
@@ -23,11 +24,17 @@
 
     function throtte (fn, wait) {
       var pre = Date.now()
+      let flag = true
       return function () {
-        var cur = Date.now()
-        if ((cur - pre) > wait) {
+        if (flag) {
           fn.apply(this, arguments)
           pre = Date.now()
+        } else {
+          var cur = Date.now()
+          if ((cur - pre) > wait) {
+            fn.apply(this, arguments)
+            pre = Date.now()
+          }
         }
       }
     }
@@ -61,10 +68,15 @@
       }
     }
 
-
-    box.onmousemove = throtte2(function () {
-      console.log('dd')
-    }, 1000)
+    const lodash = window._
+    box.onclick = () => {
+      setInterval(lodash.throttle(function () {
+          console.log('dd')
+        }, 1000, {
+          leading: true,
+          trailing: true
+        }), 10)
+    }
 
   </script>
 </body>
