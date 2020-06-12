@@ -9,7 +9,20 @@
 </head>
 
 <body>
+  <script src="vdom/index.js"></script>
   <div id="app"></div>
+  <script>
+    const vnode = createElement('div', {
+      style: 'color: red;',
+      class: 'foo'
+    }, [
+      '中文',
+      createElement('p', {class: 'dom'}, ['内容'])
+    ])
+    const el = render(vnode)
+    document.getElementById('app').appendChild(el)
+
+  </script>
 </body>
 
 </html>
