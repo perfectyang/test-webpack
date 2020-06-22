@@ -10,6 +10,17 @@
 
 <body>
   <div id="app"></div>
+  <script>
+    var app = document.getElementById('app');
+    var pEl = document.createElementNS('asss12xx', 'p');
+    var text = document.createTextNode('中文');
+    var comment = document.createComment('这是一个注释');
+    pEl.appendChild(text);
+    pEl.appendChild(comment);
+    app.appendChild(pEl);
+    pEl.parentNode.insertBefore(text, pEl);
+    pEl.textContent = '新的';
+  </script>
 </body>
 
 </html>

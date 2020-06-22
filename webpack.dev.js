@@ -17,7 +17,7 @@ module.exports = merge(baseConfig, {
     contentBase: path.resolve(__dirname, 'dist'),
     compress: true,
     host: '0.0.0.0',
-    port: 3535,
+    port: 3539,
     open: false,
     overlay:  {
         warnings: false,
