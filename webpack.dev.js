@@ -6,8 +6,8 @@ const webpack = require('webpack')
 console.log('process.env', process.env.npm_config_proxy)
 console.log('process.argvargvargv', process.argv)
 // console.log('process.env---npm_config_proxy', process.env.npm_config_proxy)
-
-module.exports = merge(baseConfig, {
+const vuxLoader = require('@vux/loader')
+const webpackConfig = merge(baseConfig, {
   mode: 'development',
   devServer: {
     clientLogLevel: 'warning',
@@ -56,4 +56,9 @@ module.exports = merge(baseConfig, {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin()
   ]
+})
+module.exports = vuxLoader.merge(webpackConfig, {
+  plugins: [{
+    name: 'vux-ui'
+  }]
 })

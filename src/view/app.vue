@@ -1,3 +1,6 @@
+<i18n>
+  
+</i18n>
 <template>
   <div class="app">
 
@@ -5,6 +8,7 @@
       <span >{{ changeLimit }}</span>
       <a :href="changeUrl">{{ $t('change') }}</a>
     </i18n>
+    aaaa-----
     <!-- <div :id="type | filterType">在这里测试啊测试自动打包---没test</div> -->
     <bridge-slot :objInfo="whichComp(type)" :computeReactive="computeWhich()" v-slot:default="slotProps">
      <div>
@@ -31,16 +35,21 @@
     <!-- <div>{{whichComp(type).name}}</div>
     <div>{{whichComp(type).age}}</div> -->
     <button @click="selectType">click</button>
+    <div id="testBlock"></div>
+    <div id="testBlock1">1111</div>
   </div>
 </template>
 
 <script>
 import bridgeSlot from './bridge-slot.vue'
+import Vue from 'vue'
+let vm = null
 export default {
   components: {
     bridgeSlot
   },
-  data () {
+  data (vm) {
+    vm = vm
     return {
       changeUrl: '/change',
       refundUrl: '/refund',
@@ -78,8 +87,30 @@ export default {
   },
   mounted () {
     console.log('this', this)
+    const SubVue = Vue.extend({
+      template: '<div>在这果要要222b</div>',
+      data () {
+        return {
+          name: '在这里'
+        }
+      }
+    })
+    const sub = new SubVue({
+      // template: '<div>在这果要要</div>',
+      data () {
+        return {
+          // name: '真的',
+          age: 111
+        }
+      }
+    })
+    console.log('sub', sub, SubVue.options)
+    sub.$mount('#testBlock')
+    console.log('aaaa---', this.$mount('#testBlock1'))
   }
 }
+
+console.log('vm', vm)
 </script>
 
 <style lang='less' scoped>

@@ -16,8 +16,22 @@ const i18n = new VueI18n({
   messages
 })
 
+const myPlugin = function (...params) {
+  console.log('params', params)
+}
+
+Vue.use(myPlugin, {
+  name: 'myplugin'
+}, {
+  age: 11
+})
+
+
 new Vue({
   i18n,
   el: '#app',
-  render: h => h(App)
+  render: (h) => {
+    const res = h(App)
+    return res 
+  }
 })
