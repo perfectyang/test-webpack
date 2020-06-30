@@ -12,7 +12,8 @@ function resolve(dir) {
 
 module.exports = {
   entry: {
-    index: [path.resolve(__dirname, 'src/app.js')]
+    // index: [path.resolve(__dirname, 'src/app.js')]
+    index: [path.resolve(__dirname, 'src/test-core/index.js')]
   },
   resolve: {
     extensions: ['.js', '.vue', '.json', '.jsx'],
