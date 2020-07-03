@@ -1,4 +1,3 @@
-import { add } from "lodash";
 
 export function effect(fn, options={}) {
   const effect = createEffective(fn, options)
