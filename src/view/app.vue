@@ -1,11 +1,15 @@
 <template>
   <div class="app">
-    <div>在这里测试啊测试自动打包---没test</div>
+    <player />
   </div>
 </template>
 
 <script>
+import player from './player/index.vue'
 export default {
+  components: {
+    player
+  },
   data () {
     return {
     }

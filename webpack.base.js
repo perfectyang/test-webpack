@@ -14,6 +14,11 @@ module.exports = {
   entry: {
     index: [path.resolve(__dirname, 'src/app.js')]
   },
+  output:{
+    publicPath: process.env.NODE_ENV === 'production'
+      ? '/'
+      : '/'
+  },
   resolve: {
     extensions: ['.js', '.vue', '.json', '.jsx'],
     alias: {
