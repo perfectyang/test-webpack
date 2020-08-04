@@ -25,6 +25,11 @@ module.exports = merge(baseConfig, {
     },
     // publicPath: config.dev.assetsPublicPath,
     proxy: {
+      '/api': {
+        target: 'http://0.0.0.0:8089',
+        changeOrigin: true,
+        secure: false
+      }
     },
     quiet: true,
     // watchOptions: {
