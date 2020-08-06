@@ -38,6 +38,21 @@ app.post('/api/upload', async (req, res) => {
     path: path.replace(__dirname, 'http://127.0.0.1:8089')
   })
 })
+app.post('/api/media', async (req, res) => {
+  let {chunk, filename} = req.body
+  chunk = Buffer.from(chunk, 'base64')
+  let spark = new SparkMD5.ArrayBuffer(),
+      suffix = /\.([0-9a-zA-Z]+)$/.exec(filename)[1],
+      path;
+  spark.append(chunk);
+  path = `${uplodDir}/${spark.end()}.${suffix}`
+  fs.writeFileSync(path, chunk);
+  res.send({
+    code: 0,
+    originalFilename: filename,
+    path: path.replace(__dirname, 'http://127.0.0.1:8089')
+  })
+})
 
 app.post('/api/es5', function (req, res) {
   const str = transformCode(req.body.data)

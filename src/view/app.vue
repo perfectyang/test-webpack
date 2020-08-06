@@ -8,6 +8,7 @@
 <script>
 import {fileParse} from '../api/utils'
 import fetch from '../api/fetch'
+import sparkMd5 from 'spark-md5'
 export default {
   data () {
     return {
@@ -47,6 +48,25 @@ export default {
         filename: file.name
       })
       console.log('res', res)
+    },
+    async getMedia () {
+      const file = this.$refs.file.files[0]
+      const buffer = await fileParse(file, 'buffer')
+      const spark = new sparkMd5.ArrayBuffer()
+      spark.append(buffer) 
+      let hash = spark.end()
+      let suffix = /\.([0-9a-zA-Z]+)$/i.exec(file.name)[1]
+      let parseList = []
+      let partSize = file.size / 100
+      let cur = 0
+      for (let i = 0; i < 100; i++) {
+        let tem = {
+          chunk: file.slice(cur, cur + partSize),
+          filename: `${hash}_${i}_${suffix}`
+        }
+        cur += partSize
+        parseList.push(tem)
+      }
     }
   }
 }
