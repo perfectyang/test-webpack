@@ -17,7 +17,7 @@ function assetsPath(_path) {
   return path.posix.join(assetsSubDirectory, _path)
 }
 const productionConfig = merge(baseConfig, {
-  mode: 'production',
+  mode: 'development',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: assetsPath('js/[name].js?[hash]'),
