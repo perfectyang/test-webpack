@@ -11,14 +11,23 @@
 <body>
   <div id="app"></div>
   <script>
-    var arr=[];
-    for (let i=0; i<=3 ;i++ ){
-        arr.push(function(){
-            console.log(i);
-        })
+
+    const f = function (ob) {
+      function inner () {
+        ob.id = Math.random() * 100 + 1
+        return JSON.parse(JSON.stringify(ob))
+      }
+      return inner()
     }
-    arr[0](); 
-    arr[1]();
+    const testObj = {
+      name: 'good',
+      id: 1
+    }
+    const fn = f(testObj)
+    fn.name = 'change'
+    console.log(fn)
+    const fn2 = f(testObj)
+    console.log(fn2)
   </script>
 </body>
 

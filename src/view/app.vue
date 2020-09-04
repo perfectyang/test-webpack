@@ -1,54 +1,31 @@
 <template>
   <div class="app">
-    <div>在这里测试啊测试自动打包---没test</div>
-    {{list}}
-    <div>
-      <button @click="add">添加</button>
-      <button @click="modify">修改</button>
-    </div>
+    aaa
+    <!-- <video width="100%" v-if="show" ref="video" class="hero-video-actual" :autoplay="autoplay" loop webkit-playsinline playsinline>
+      <source src="http://test_static.qdtech.ai/upload/question/decision/cv/ql/cvqllhic6v21ea3ccf98e68a87ac0f2967e63d2a401.mp4" type="video/mp4">
+    </video> -->
   </div>
 </template>
 
 <script>
-const sub = {
-  name: 'sub'
-}
-const testObj = {
-  name: 'prent',
-  id: '',
-  sub
-}
-
-const f = (target, id) => {
-  return () => {
-      target[id] = Math.random() * 100 + 1
-      return JSON.parse(JSON.stringify(target))
-      // return target
-  }
-}
-
-const factoryObj = f({
-  name: 'prent',
-  id: '',
-  sub
-}, 'id')
-
-
+import {Howl, Howler} from 'howler'
 export default {
   data () {
     return {
-      list: []
+      list: [],
+      autoplay: false,
+      show: false
     }
   },
   methods: {
-    add () {
-      this.list.push(factoryObj())
-    },
-    modify () {
-      const lastItem = this.list[this.list.length - 1]
-      lastItem.id = '99999'
-      lastItem.sub.name = '更改'
-    },
+  },
+  mounted () {
+    var sound = new Howl({
+      src: ['http://dev_static.qdtech.ai/upload/decision/81/wf/81wfq5x92uf342f051db6f0a888f63a777903779a60.mp3']
+    })
+    sound.play()
+    Howler.volume(1
+    )
   }
 }
 </script>
