@@ -89,7 +89,10 @@ module.exports = {
       title: '首页在这里',
       filename: 'index.html',
       template: path.resolve(__dirname, 'src', 'index.html'),
-      hash: true
+      hash: true,
+      minify: {
+        removeComments: true
+      }
     })
     // new HtmlWebpackPlugin({
     //   title: '首页在这里',

@@ -1,70 +1,45 @@
 <template>
   <div class="app">
-    在这里
-    {{mergeData}}
+    <!-- 我去掉注释 -->
+    <!-- <p v-for="(item, idx) in mergeData" :key="idx">{{item.name}}</p> -->
+    <button @click="setItem">set</button>
+    <button @click="getItem">get</button>
   </div>
 </template>
 
 <script>
-import firstData from '../mock-data/page-1.json'
-import secondData from '../mock-data/page-2.json'
+import dataJson from './compare.json'
+import localforage from 'localforage'
 export default {
   name: 'app',
   data () {
     return {
-      firstData,
-      secondData,
-      temData: []
+      primary: dataJson.primary,
+      scondary: dataJson.scondary,
+      mergeData: {},
+      count: 1
     }
   },
-  computed: {
-    mergeData () {
-      return this.mergeDataFn(this.firstData, this.secondData)
-    }
+  created () {
+    this.mergeData = this.transformSort(this.primary, this.scondary)
   },
   methods: {
-    mergeDataFn (first, second) {
-      console.log(first, second)
-      this.temData = []
-      this.filterEachQs(second, (qs) => {
-        if (qs) {
-          this.temData.push(qs)
-        }
-      })
-      console.log('没有匹配的', this.temData)
-      return first.concat(this.temData)
+    transformSort (primary, scondary) {
+      console.log(primary, scondary)
+      return primary.concat(scondary)
     },
-    filterEachQs (data, callback) {
-      data.forEach(qs => {
-        this.handleLgoic(qs, callback)
-      })
-    },
-    handleLgoic (qs, callback) {
-      const type = +qs.question_type
-      if ([6, 14].includes(type)) { // 矩阵和追问题
-        qs.extra_logic = qs.extra_logic.filter(exlogic => !exlogic.question.match)
-        if (qs.extra_logic.length) {
-          callback(qs)
-        } else {
-          callback('')
-        }
-      } else if (type === 8) { // 组合题里面的
-        qs.random_combination.question_group = qs.random_combination.question_group.filter(qg => {
-          qg.group_list = qg.group_list.filter(glq => !glq.question.match)
-          return qg.group_list.length > 0
+    setItem () {
+      this.count++
+      localforage.setItem('id' + this.count, {name: 'xxx' + this.count}).then(rs => {
+        console.log('往下走')
+        localforage.getItem('id' + this.count).then(rs => {
+          console.log(rs)
         })
-        if (qs.random_combination.question_group.length > 0) {
-          callback(qs)
-        } else {
-          callback('')
-        }
-      } else { // 正常的普通题
-        if (!qs.match) {
-          callback(qs)
-        } else {
-          callback('')
-        }
-      }
+      })
+    },
+    async getItem () {
+      const value = await localforage.getItem('id' + this.count)
+      console.log('valu', value)
     }
   }
 }
