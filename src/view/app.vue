@@ -1,45 +1,23 @@
 <template>
-  <div class="app">
-    <!-- 我去掉注释 -->
-    <!-- <p v-for="(item, idx) in mergeData" :key="idx">{{item.name}}</p> -->
-    <button @click="setItem">set</button>
-    <button @click="getItem">get</button>
-  </div>
+<div>
+  <button @click="goTarget">target</button>
+  <list-data ref="listData" />
+</div>
 </template>
 
 <script>
-import dataJson from './compare.json'
-import localforage from 'localforage'
+import listData from './list-data'
 export default {
-  name: 'app',
+  components: {
+    listData
+  },
   data () {
     return {
-      primary: dataJson.primary,
-      scondary: dataJson.scondary,
-      mergeData: {},
-      count: 1
     }
   },
-  created () {
-    this.mergeData = this.transformSort(this.primary, this.scondary)
-  },
   methods: {
-    transformSort (primary, scondary) {
-      console.log(primary, scondary)
-      return primary.concat(scondary)
-    },
-    setItem () {
-      this.count++
-      localforage.setItem('id' + this.count, {name: 'xxx' + this.count}).then(rs => {
-        console.log('往下走')
-        localforage.getItem('id' + this.count).then(rs => {
-          console.log(rs)
-        })
-      })
-    },
-    async getItem () {
-      const value = await localforage.getItem('id' + this.count)
-      console.log('valu', value)
+    goTarget () {
+      this.$refs.listData.target(8)
     }
   }
 }
