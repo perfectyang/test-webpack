@@ -1,7 +1,7 @@
 <template>
   <div class="layout" ref="visibleWrap">
-    <div class="layout__main" id="interviewContent" @scroll="handleScroll">
-      <div class="section" v-for="item in renderList" :key="item.idx" :id="item.idx">{{item.value}}</div>
+    <div class="layout__main" id="J_listWrap" @scroll="handleScroll">
+      <div class="section J_section" v-for="item in renderList" :key="item.id" :id="item.id">{{item.value}}</div>
     </div>
   </div>
 </template>
@@ -9,9 +9,9 @@
 <script>
 const arr = []
 let renderList = []
-for (let i = 1; i < 20; i++) {
+for (let i = 1; i < 100; i++) {
   arr.push({
-    idx: i,
+    id: i,
     value: i
   })
 }
@@ -23,21 +23,26 @@ export default {
       page: 0,
       renderList: [],
       count: 1,
-      timer: null
+      timer: null,
+      estimatedItemSize: 200
     }
   },
-  created () {
-    this.renderList = this.longList.slice(-10)
-    // this.socketAdd()
-  },
   mounted () {
-    this.goBottom()
+    // this.goBottom()
+    this.start = 0
+    this.end = this.start + this.visibleCount * 3
+    console.log('----', this.start, this.end)
+    this.renderList = this.longList.slice(this.start, this.end)
   },
   computed: {
     visibleHeight () {
       const visibleWrap = this.$refs.visibleWrap
+      console.log('visibleWrap', visibleWrap)
       const contentHeight = Math.ceil(Number.parseFloat(window.getComputedStyle(visibleWrap).height))
       return contentHeight
+    },
+    visibleCount () {
+      return Math.ceil((this.visibleHeight ) / this.estimatedItemSize)
     }
   },
   methods: {
@@ -67,25 +72,34 @@ export default {
       this.renderList = this.longList.slice(target, target + 10)
     },
     goBottom () {
-      const dom = document.getElementById('interviewContent')
+      const dom = document.getElementById('J_listWrap')
       dom.scrollTop = dom.scrollHeight + this.visibleHeight
     },
     nextPage () {
-      const len = this.renderList.length
-      const lastItem = this.renderList[len - 1]
-      const realLastItem = this.longList[this.longList.length - 1]
-      if (lastItem.idx === realLastItem.idx || len === this.longList.length) return
-      this.renderList = this.longList.slice(0, len + 10)
+      let nodes = document.getElementsByClassName('J_section')
+      if (+nodes[nodes.length - 1].id !== +this.longList[this.longList.length - 1].id) {
+        let preId = nodes[nodes.length - 1].id
+        let mid = Math.floor(nodes.length / 2)
+        this.start = +nodes[mid].id
+        this.end = this.start + this.visibleCount * 3
+        this.renderList = this.longList.slice(this.start, this.end)
+        this.$nextTick(() => {
+          document.getElementById(preId).scrollIntoView({ block: 'center'})
+        })
+      }
     },
     prePage (e, scrollHeigh) {
-      const firstItem = this.renderList[0]
-      const realFirstItem = this.longList[0]
-      if (firstItem.idx === realFirstItem.idx || this.renderList.length === this.longList.length) return
-      const len = this.renderList.length + 10
-      this.renderList = this.longList.slice(-len)
-      this.$nextTick(() => {
-        e.target.scrollTop = e.target.scrollHeight - scrollHeight
-      })
+      let nodes = document.getElementsByClassName('J_section')
+      if (+nodes[0].id !== +this.longList[0].id) {
+        let preId = nodes[0].id
+        let mid = Math.ceil(nodes.length / 2)
+        this.end = +nodes[mid].id
+        this.start = this.end - this.visibleCount * 3 >= 0 ? this.end - this.visibleCount * 3 : 0
+        this.renderList = this.longList.slice(this.start, this.end)
+        this.$nextTick(() => {
+          document.getElementById(preId).scrollIntoView({ block: 'center' })
+        })
+      }
     },
     handleScroll (e) {
       const scrollHeight = e.target.scrollHeight
