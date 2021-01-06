@@ -17,7 +17,7 @@
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
     "@babel/runtime-corejs2": "^7.9.2",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-core": "^6.26.0",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.1.4",
