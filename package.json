@@ -37,7 +37,7 @@
     "body-parser": "^1.19.0",
     "brfs": "^1.6.1",
     "css-loader": "^0.28.11",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
     "fs": "0.0.1-security",
